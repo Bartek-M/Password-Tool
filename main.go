@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func generate(n int) string {
@@ -20,6 +21,48 @@ func generate(n int) string {
 	}
 
 	return string(password)
+}
+
+func validate(passw string) int {
+	score := 0
+
+	if len(passw) >= 16 {
+		score += 2
+	} else if len(passw) >= 8 {
+		score += 1
+	}
+
+	hasUpper := false
+	hasLower := false
+	hasDigit := false
+	hasSpecial := false
+
+	for _, char := range passw {
+		if unicode.IsNumber(char) {
+			hasDigit = true
+		} else if unicode.IsUpper(char) {
+			hasUpper = true
+		} else if unicode.IsLower(char) {
+			hasLower = true
+		} else {
+			hasSpecial = true
+		}
+	}
+
+	if hasUpper {
+		score += 2
+	}
+	if hasLower {
+		score += 2
+	}
+	if hasDigit {
+		score += 2
+	}
+	if hasSpecial {
+		score += 2
+	}
+
+	return score
 }
 
 func hash(passw string) string {
@@ -58,7 +101,7 @@ func menu(option string) {
 
 		fmt.Println(generate(num))
 	} else if option == "val" {
-		fmt.Println("Validate password")
+		fmt.Println("Validated password score:", validate(text), "/ 10")
 	} else if option == "hash" {
 		fmt.Println("Hashed password:", hash(text))
 	}
