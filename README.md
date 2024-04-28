@@ -1,11 +1,10 @@
 # Password Tool
+Simple tool for **generating**, **validating** and **hashing** passwords. It was made using **Golang** with built-in libraries. This is my first **Go** project.
 
-> **NOTE:** This project is not yet finished (work in progress)
->
-> If you find any bugs, feel free to create a new issue in this repository.
+> If you find any bugs, feel free to create a new **issue** in this repository.
 
 ## Requirements
-- Go 1.22.1
+- Golang 1.22.1 or above 
 
 ## Setup
 Once you have Go installed, run
