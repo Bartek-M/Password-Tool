@@ -5,9 +5,22 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
+	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 )
+
+func generate(n int) string {
+	charset := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_|/\\'\""
+	password := make([]byte, n)
+
+	for i := 0; i < n; i++ {
+		password[i] = charset[rand.Intn(len(charset))]
+	}
+
+	return string(password)
+}
 
 func hash(passw string) string {
 	hasher := sha512.New()
@@ -25,20 +38,29 @@ func menu(option string) {
 		return
 	}
 
+	scanner := bufio.NewScanner(os.Stdin)
+	checkText := "Type password: "
+
 	if option == "gen" {
-		fmt.Println("Generate password")
-		return
+		checkText = "Password length: "
 	}
 
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Printf("Type password: ")
+	fmt.Print(checkText)
 	scanner.Scan()
-	password := scanner.Text()
+	text := scanner.Text()
 
-	if option == "val" {
+	if option == "gen" {
+		num, err := strconv.Atoi(text)
+		if err != nil || num < 8 {
+			fmt.Println("Invalid password length! Pass a number >= 8")
+			return
+		}
+
+		fmt.Println(generate(num))
+	} else if option == "val" {
 		fmt.Println("Validate password")
 	} else if option == "hash" {
-		fmt.Println("Hashed password:", hash(password))
+		fmt.Println("Hashed password:", hash(text))
 	}
 }
 
@@ -55,7 +77,7 @@ func main() {
 		err := scanner.Scan()
 		option := strings.ToLower(scanner.Text())
 
-		if option == "quit" || !err {
+		if option == "quit" || option == "quit()" || !err {
 			break
 		}
 
