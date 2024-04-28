@@ -10,7 +10,7 @@ Simple tool for **generating**, **validating** and **hashing** passwords. It was
 Once you have Go installed, run
 
 ```bash
-go run main.go
+go run .
 ```
 
 This will only run the script, if you want to have an executable application, run
